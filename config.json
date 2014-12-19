@@ -1,0 +1,20 @@
+{
+  "signatureVersion": "v4",
+  "region": "us-west-2",
+
+  "sha_noise" : "kzl",
+
+  "node" : {
+    "port" : "3002"
+  },
+
+  "s3" : {
+    "bucket" : "a2a6e9be-931b-4728-a481-a874e10d6661_original",
+    "bucket_thumb" : "a2a6e9be-931b-4728-a481-a874e10d6661_thumb"
+  },
+
+  "redis" : {
+    "port" : "6379",
+    "host" : "localhost"
+  }
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' >
+<head>
+    <title>AJAX Upload Progress & Cancel Upload</title>
+    <script type="application/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+
+    <script type='text/javascript'>
+
+        $(function(){
+            $("#ff").submit(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "/login/",
+                    data: $("#ff").serialize(), // serializes the form's elements.
+                    success: function(data) {
+                        $("#logged").show();
+                        $("#token").show().html(data.token);
+                        $("#ff").hide();
+                    }
+                });
+
+                return false; // avoid to execute the actual submit of the form.
+            });
+
+            $("#ffUp").submit(function(e) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/api/private/keu_uploads/",
+                    data: new FormData( this ),
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        "Authorization": "Bearer " + $("#token").html()
+                    },
+                    success : function(data) {
+                        alert('1 '  + data);
+                    }
+                }).done(function (data) {
+                    //alert(data);
+                });
+                e.preventDefault();
+                return false; // avoid to execute the actual submit of the form.
+            });
+
+            $("#del").click(function() {
+                $.ajax({
+                    type: 'DELETE',
+                    url: "/api/private/delete_file/",
+                    headers: {
+                        "Authorization": "Bearer " + $("#token").html()
+                    },
+                    success : function(data) {
+                        alert('1 '  + data);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+
+<form id="ff" action="/login/" method="post">
+    Username:<br>
+    <input type="text" name="username" value="john.doe" />
+    <br>
+    Password:<br>
+    <input type="password" name="password" value="foobar" />
+    <br>
+    <input type="submit" value="Submit" />
+</form>
+
+<div id="token" style="display:none"></div>
+<p id="logged" style="display:none">Logged!!!</p>
+
+<br><br>
+
+<form id="ffUp" action="/api/private/keu_uploads/" method="post" enctype="multipart/form-data">
+    <input type="file" name="dummyname" /><br />
+    <input type="submit" />
+</form>
+
+<br><br>
+
+<form method="get" action="/api/private/downloads">
+    <button type="submit">Download!</button>
+</form>
+
+<br><br>
+
+<button id="del" type="submit">Delete</button>
+
+
+</body>
+</html>
